@@ -566,7 +566,12 @@ class LuaBfbsGenerator : public BaseBfbsGenerator {
     if (IsBool(base_type)) {
       return field->default_integer() ? "true" : "false";
     }
-    if (IsScalar(base_type)) { return NumToString((field->default_integer())); }
+    if (IsScalar(base_type)) {
+      if (field->optional()) {
+        return "nil";
+      }
+      return NumToString(field->default_integer()); 
+    }
     // represents offsets
     return "0";
   }
